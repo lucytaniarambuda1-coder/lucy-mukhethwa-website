@@ -574,6 +574,8 @@ def sitemap():
         return
     paths = ["/", "/about/", "/book/", "/articles/", "/contact/"] + [f"/articles/{a['slug']}/" for a in ARTICLES]
     urls = "".join(f"<url><loc>{S['url']}{p}</loc></url>" for p in paths)
+    with open(os.path.join(OUT, "robots.txt"), "w") as f:
+        f.write(f"User-agent: *\nAllow: /\nSitemap: {S['url']}/sitemap.xml\n")
     with open(os.path.join(OUT, "sitemap.xml"), "w") as f:
         f.write(f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>')
 
