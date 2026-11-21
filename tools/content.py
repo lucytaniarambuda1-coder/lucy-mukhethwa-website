@@ -11,9 +11,10 @@ SITE = {
     "instagram_handle": "@lucytaniar",
     "flow_instagram": "https://www.instagram.com/flow_cornerr/",
     "linkedin": "https://www.linkedin.com/in/mukhethwa-lucytania-rambuda-836575169/",
-    # Paste your Substack address here (e.g. https://lucymukhethwa.substack.com) and regenerate.
-    # While it is empty, the site hides every Substack button and uses its own sign-up form.
-    "substack": "",
+    # Substack: profile link for buttons, publication address for the post feed and subscribing.
+    # Posts are pulled from the publication's RSS feed every time the site builds.
+    "substack": "https://substack.com/@lucytaniar",
+    "substack_pub": "https://lucytaniar.substack.com",
 }
 
 BOOK = {
