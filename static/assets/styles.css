@@ -35,7 +35,7 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
-img { max-width: 100%; display: block; }
+img { max-width: 100%; height: auto; display: block; }
 a { color: var(--blue); text-underline-offset: 3px; text-decoration-thickness: 1px; }
 h1, h2, h3, .display { font-family: var(--display); font-weight: 500; line-height: 1.05; letter-spacing: -0.01em; color: var(--deep-blue); }
 em, .serif-i { font-style: italic; }
@@ -141,7 +141,7 @@ section + section { border-top: 1px solid var(--hairline); }
 .book-feature { display: grid; grid-template-columns: .8fr 1.2fr; gap: 5rem; align-items: center; }
 .book-cover { position: relative; justify-self: center; padding: 36px; background: var(--sky); }
 .on-dark .book-cover { background: rgba(255,255,255,.08); }
-.book-cover img { width: min(300px, 64vw); }
+.book-cover img { width: min(280px, 60vw); height: auto; }
 .book-cover .badge { position: absolute; left: 50%; bottom: -14px; transform: translateX(-50%); background: var(--paper); color: var(--rose); border: 1px solid var(--hairline); padding: .45rem 1rem; font-size: .72rem; letter-spacing: .28em; text-transform: uppercase; white-space: nowrap; }
 .book-cover .badge br { display: none; }
 .book-feature h2 { font-size: clamp(2.6rem, 5vw, 4rem); }

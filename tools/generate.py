@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
 """Builds the site into site/. Run from the repo root: python3 tools/generate.py"""
 import html
+import json
 import os
+import re
 import shutil
 import sys
+import urllib.request
+from email.utils import parsedate_to_datetime
 
 sys.path.insert(0, os.path.dirname(__file__))
 from content import SITE, BOOK, ARTICLES  # noqa: E402
@@ -12,6 +16,41 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "site")
 S = SITE
 SUB = S["substack"].rstrip("/")
+SUBPUB = S.get("substack_pub", "").rstrip("/")
+CACHE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "substack_cache.json")
+
+
+def load_substack():
+    """Latest Substack posts from the RSS feed; falls back to the last saved copy if offline."""
+    if not SUBPUB:
+        return []
+    try:
+        req = urllib.request.Request(SUBPUB + "/feed", headers={"User-Agent": "Mozilla/5.0 (site build)"})
+        xml = urllib.request.urlopen(req, timeout=15).read().decode("utf-8", "replace")
+        posts = []
+        for item in re.findall(r"<item>(.*?)</item>", xml, re.S):
+            def field(tag):
+                m = re.search(rf"<{tag}>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?</{tag}>", item, re.S)
+                return html.unescape(m.group(1).strip()) if m else ""
+            date = field("pubDate")
+            try:
+                date = parsedate_to_datetime(date).strftime("%-d %B %Y")
+            except Exception:
+                pass
+            posts.append({"title": field("title"), "dek": field("description"), "url": field("link"), "date": date})
+        if posts:
+            with open(CACHE, "w", encoding="utf-8") as f:
+                json.dump(posts, f, indent=1, ensure_ascii=False)
+            return posts
+    except Exception as err:
+        print("Substack feed unavailable, using saved copy:", err)
+    if os.path.exists(CACHE):
+        with open(CACHE, encoding="utf-8") as f:
+            return json.load(f)
+    return []
+
+
+POSTS = load_substack()
 
 ICON = {
     "ig": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>',
@@ -126,13 +165,20 @@ def article_cards(items):
     return "\n".join(out)
 
 
+def substack_cards(items):
+    out = []
+    for p in items:
+        out.append(f"""<a class="article-card reveal" href="{e(p['url'])}" target="_blank" rel="noopener">
+  <div class="top"><div class="meta">Substack · {e(p['date'])}</div><h3>{e(p['title'])}</h3></div>
+  <div class="body"><p>{e(p['dek'])}</p><span class="read-more">Read on Substack →</span></div>
+</a>""")
+    return "\n".join(out)
+
+
 def subscribe_block():
-    if SUB:
-        action = f"""<form action="{SUB}/api/v1/free" method="post" target="_blank">
-  <input type="email" name="email" placeholder="Your email address" required aria-label="Email address">
-  <button class="btn btn-navy" type="submit">Subscribe on Substack</button>
-</form>
-<p style="margin-top:.8rem;font-size:.9rem">Or <a href="{SUB}" target="_blank" rel="noopener" style="color:var(--deep-blue);font-weight:700">read everything on Substack →</a></p>"""
+    if SUBPUB:
+        action = f"""<a class="btn btn-navy" href="{SUBPUB}/subscribe" target="_blank" rel="noopener">Subscribe on Substack {ARROW}</a>
+<p style="margin-top:1rem;font-size:1rem">Free. New posts go straight to your inbox. <a href="{SUB}" target="_blank" rel="noopener">See my Substack profile →</a></p>"""
     else:
         action = """<form name="newsletter" method="POST" data-netlify="true" netlify-honeypot="company" action="/thanks/">
   <input type="hidden" name="form-name" value="newsletter">
@@ -196,7 +242,7 @@ def home():
 
 <section>
   <div class="wrap split">
-    <div class="photo-stack reveal"><span class="tape"></span><img src="/assets/lucy.jpg" alt="Portrait of Lucy Mukhethwa" width="768" height="960" loading="lazy"></div>
+    <div class="photo-stack reveal"><span class="tape"></span><img src="/assets/re3.jpg" alt="Lucy looking out over the sea from a wooden deck" width="1000" height="1000" loading="lazy"></div>
     <div class="reveal">
       <span class="eyebrow">About me</span>
       <h2>Writer, strategist, and a lifelong learner</h2>
@@ -264,10 +310,10 @@ def home():
 <section>
   <div class="wrap">
     <div class="section-head reveal" style="display:flex;justify-content:space-between;align-items:flex-end;gap:1.5rem;flex-wrap:wrap;max-width:none">
-      <div style="max-width:620px"><span class="eyebrow">Articles</span><h2>Latest writing</h2><p>Reflections on faith, waiting seasons and purpose.</p></div>
+      <div style="max-width:620px"><span class="eyebrow">Articles</span><h2>Latest writing</h2><p>Fresh from my Substack: faith, growth, and life in the middle.</p></div>
       <a class="btn btn-outline" href="/articles/">All articles {ARROW}</a>
     </div>
-    <div class="grid g3">{article_cards(ARTICLES[:3])}</div>
+    <div class="grid g3">{substack_cards(POSTS[:3]) if POSTS else article_cards(ARTICLES[:3])}</div>
   </div>
 </section>
 
@@ -441,6 +487,12 @@ def book():
 
 def articles_index():
     sub = f' <a class="btn btn-yellow" href="{SUB}" target="_blank" rel="noopener">Read me on Substack {ARROW}</a>' if SUB else ""
+    substack_section = f"""<section>
+  <div class="wrap">
+    <div class="section-head reveal"><span class="eyebrow">On my Substack</span><h2>Latest posts</h2><p>I write regularly on Substack about faith, growth, relationships and everyday life. Every post opens on Substack.</p></div>
+    <div class="grid g3">{substack_cards(POSTS)}</div>
+  </div>
+</section>""" if POSTS else ""
     body = f"""
 <section class="page-hero">
   <div class="wrap">
@@ -450,8 +502,10 @@ def articles_index():
     <div style="margin-top:1.8rem;display:flex;gap:.8rem;flex-wrap:wrap"><a class="btn btn-pink" href="/book/">Read the book {ARROW}</a>{sub}</div>
   </div>
 </section>
+{substack_section}
 <section>
   <div class="wrap">
+    <div class="section-head reveal"><span class="eyebrow">From the book</span><h2>Reflections from <em>Passion. Purpose. Peace.</em></h2><p>Pieces that grew out of my book and my own detours.</p></div>
     <div class="grid g3">{article_cards(ARTICLES)}</div>
     <div class="card reveal" style="margin-top:2.5rem;display:flex;justify-content:space-between;align-items:center;gap:1.5rem;flex-wrap:wrap">
       <div><span class="eyebrow">Career writing</span><h3>Looking for CV, LinkedIn and job-hunting advice?</h3><p>My career articles and free guides live on the Flow Corner Learning Hub.</p></div>
@@ -475,7 +529,7 @@ def article(a, idx):
     <div class="meta" >{e(a['tag'])} · {a['minutes']} min read</div>
     <h1>{e(a['title'])}</h1>
     <p>{e(a['dek'])}</p>
-    <div class="byline"><img src="/assets/lucy-480.jpg" alt="" width="46" height="46"><span>By <strong>Lucy Mukhethwa</strong></span></div>
+    <div class="byline"><img src="/assets/lucy-face.jpg" alt="" width="46" height="46"><span>By <strong>Lucy Mukhethwa</strong></span></div>
   </div>
 </header>
 <div class="wrap"><div class="prose">{a['body']}</div></div>
