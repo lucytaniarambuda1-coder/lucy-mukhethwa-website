@@ -3,7 +3,7 @@
 SITE = {
     "name": "Lucy Mukhethwa",
     "full_name": "Mukhethwa Lucytania Rambuda",
-    "url": "https://lucymukhethwa.netlify.app",  # change when a domain is connected
+    "url": "https://lucymukhethwa.flowcorner.co.za",
     "tagline": "Author · Career Strategist · I&O Psychology",
     "amazon": "https://www.amazon.com/dp/B0HNTZL5BB",
     "flow_corner": "https://flowcorner.co.za",
