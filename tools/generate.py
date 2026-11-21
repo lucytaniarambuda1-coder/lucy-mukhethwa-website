@@ -247,7 +247,7 @@ def home():
       <span class="eyebrow">About me</span>
       <h2>Writer, strategist, and a lifelong learner</h2>
       <p>I’m Lucy Mukhethwa, a South African writer based in Johannesburg. My three guiding words are <strong>passion, purpose and peace</strong>, and they shape everything I build.</p>
-      <p>By day I work in AI projects and leadership support, after 6+ years in HR and operations. I’m studying a Master’s in Industrial &amp; Organisational Psychology, with my research focused on career psychology. And I run Flow Corner, where I help people get hired and grow.</p>
+      <p>By day I work in AI projects and leadership support, after 6+ years in HR and operations. I hold a BA in Psychology, an Honours in Industrial &amp; Organisational Psychology and a PGCE, and I’m now doing a research Master’s in Industrial Psychology focused on career psychology. And I run Flow Corner, where I help people get hired and grow.</p>
       <p>Rooted in my Christian faith, I care about helping people uncover the value in who they are, not just what they achieve.</p>
       <a class="btn btn-outline" href="/about/" style="margin-top:.6rem">Read my story {ARROW}</a>
     </div>
@@ -335,7 +335,7 @@ def about():
   <div class="wrap">
     <span class="eyebrow" >About Lucy</span>
     <h1>Hi, I’m <span class="text-pink">Lucy</span>.</h1>
-    <p>Christian author, career strategist, AI projects manager, master’s student in Industrial &amp; Organisational Psychology, and the founder of Flow Corner. Johannesburg is home.</p>
+    <p>Christian author, career strategist, AI projects manager, master’s student in Industrial Psychology, and the founder of Flow Corner. Johannesburg is home.</p>
   </div>
 </section>
 
@@ -345,7 +345,7 @@ def about():
       <span class="eyebrow">My bio</span>
       <h2>Faith, people, and the work in between</h2>
       <p>My full name is Mukhethwa Lucytania Rambuda, but most people call me Lucy. I’m a South African writer, reader and lifelong learner whose three guiding words are peace, purpose and passion.</p>
-      <p>With a background in Industrial Psychology, I’m passionate about people development: helping individuals uncover the value in who they are, not just what they achieve. I have 6+ years in HR and operations, growing from HR Assistant to Generalist and into operations and leadership support. Today I work as an AI Projects Manager, running AI adoption projects like voice bots, chatbot integration and automation strategy.</p>
+      <p>With a background in psychology, HR and Industrial &amp; Organisational Psychology, I’m passionate about people development: helping individuals uncover the value in who they are, not just what they achieve. I have 6+ years in HR and operations, growing from HR Assistant to Generalist and into operations and leadership support. Today I work as an AI Projects Manager, running AI adoption projects like voice bots, chatbot integration and automation strategy.</p>
       <p>Rooted in my Christian faith, I write from lived experience: the quiet seasons of waiting, the courage obedience requires, and the slow, steady work of becoming whole in Christ.</p>
       <p>And through <a href="{S['flow_corner']}" target="_blank" rel="noopener">Flow Corner</a>, I help capable people stop getting filtered out because of a weak CV or a LinkedIn profile nobody can find.</p>
     </div>
@@ -372,8 +372,10 @@ def about():
   <div class="wrap">
     <div class="section-head reveal"><span class="eyebrow">Qualifications &amp; experience</span><h2>What I bring</h2></div>
     <div class="grid g2">
-      <div class="card qual reveal"><div><span class="status">In progress</span><h3>Master’s in Industrial &amp; Organisational Psychology</h3><p>UNISA, research master’s. My dissertation focuses on career psychology.</p></div></div>
-      <div class="card qual reveal"><div><span class="status">Completed</span><h3>Degree in Industrial Psychology</h3><p>The foundation of my work in people development, HR and careers.</p></div></div>
+      <div class="card qual reveal"><div><span class="status">In progress</span><h3>Master’s in Industrial Psychology</h3><p>UNISA, research master’s. My dissertation focuses on career psychology.</p></div></div>
+      <div class="card qual reveal"><div><span class="status">Completed</span><h3>Honours in Industrial &amp; Organisational Psychology</h3><p>Postgraduate study in Industrial &amp; Organisational Psychology, building on my BA.</p></div></div>
+      <div class="card qual reveal"><div><span class="status">Completed</span><h3>BA in Psychology</h3><p>Specialising in Human Resources and Industrial &amp; Organisational Psychology. The foundation of my work in people development, HR and careers.</p></div></div>
+      <div class="card qual reveal"><div><span class="status">Completed</span><h3>PGCE in Education</h3><p>Postgraduate Certificate in Education.</p></div></div>
       <div class="card qual reveal"><div><span class="status">6+ years</span><h3>HR &amp; Operations</h3><p>HR Assistant → Generalist → Coordinator. Employee relations, policy, onboarding, compliance, and executive-level operations across multiple countries.</p></div></div>
       <div class="card qual reveal"><div><span class="status">Current</span><h3>AI Projects Manager</h3><p>Leading AI adoption in a contact-centre environment: voice bots, chatbot integration and automation strategy, working with C-suite leadership.</p></div></div>
       <div class="card qual reveal"><div><span class="status">Published 2026</span><h3>Author</h3><p><em>Passion. Purpose. Peace. Becoming Whole in Christ</em>, written, designed and published end to end.</p></div></div>
